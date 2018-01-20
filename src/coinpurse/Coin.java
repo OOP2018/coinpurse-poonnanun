@@ -1,5 +1,8 @@
 package coinpurse;
-
+/**
+ * Coin represents coinage (money) with a fixed value and currency
+ * @author Poonnanun Poonpathum
+ */
 public class Coin implements Comparable<Coin>{
 
 	private double value;
@@ -37,6 +40,7 @@ public class Coin implements Comparable<Coin>{
 		return true;
 	}
 	
+	@Override
 	public int compareTo(Coin coin){
 		if(this.value < coin.getValue()){
 			return -1;
@@ -52,6 +56,6 @@ public class Coin implements Comparable<Coin>{
 	
 	@Override
 	public String toString(){
-		return value+"="+currency;
+		return value+"-"+currency;
 	}
 }
