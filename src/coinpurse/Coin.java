@@ -8,19 +8,37 @@ public class Coin implements Comparable<Coin>{
 	private double value;
 	private String currency;
 	
+	/**
+	 * Create Coin that contain vlaue and currency
+	 * @param value of coin
+	 * @param currency of coin
+	 */
 	public Coin(double value, String currency){
 		this.value = value;
 		this.currency = currency;
 	}
 	
+	/**
+	 * get value of coin
+	 * @return value of coin
+	 */
 	public double getValue(){
 		return this.value;
 	}
 	
+	/**
+	 * get currency of coin
+	 * @return currency of coin
+	 */
 	public String getCurrency(){
 		return this.currency;
 	}
 
+	/**
+	 * check if equals or not
+	 * @return true if equal
+	 * @return false if not equal
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) return false;
@@ -29,6 +47,12 @@ public class Coin implements Comparable<Coin>{
 		return this.currency.equals(((Coin) obj).currency) && this.value == ((Coin) obj).value;
 	}
 	
+	/**
+	 * compare 2 coin
+	 * @return 1 if coin a > coin b
+	 * @return 0 if both equal
+	 * @return -1 if coin b > coin a
+	 */
 	@Override
 	public int compareTo(Coin coin){
 		if(this.value < coin.getValue()){
@@ -43,6 +67,10 @@ public class Coin implements Comparable<Coin>{
 		
 	}
 	
+	/**
+	 * Get format of coin
+	 * @return String for coin
+	 */
 	@Override
 	public String toString(){
 		return value+"-"+currency;

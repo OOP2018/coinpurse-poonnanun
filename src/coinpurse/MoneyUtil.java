@@ -1,10 +1,16 @@
 package coinpurse;
-
+/**
+ * Class that test coin
+ * @author Poonanun Poonnoapthum
+ */
 import java.util.ArrayList;
 import java.util.List;
 
 public class MoneyUtil {
-
+/**
+ * initializing moneyUtil
+ * @param args notuse
+ */
 	public static void main(String[] args){
 		List<Coin> coins = new ArrayList<>();
 		coins.add(new Coin( 10.0, "Baht"));
@@ -25,21 +31,22 @@ public class MoneyUtil {
 	}
 	
 	/**
-	 * Fucking stupid code
+	 * sort coins form lowest to highest
 	 */
 	public static void sortCoins(List coin){
 		java.util.Collections.sort(coin);
 	}
 	
 	/**
-	 * 
+	 * print coins
 	 */
 	public static void printCoins(List<Coin> coin){
 		System.out.println(coin);
 	}
 	
 	/**
-	 * 
+	 * filter coin by specific currency
+	 * @return list of sorted coin
 	 */
 	public static List<Coin> filterByCurrency(List<Coin> coin, String currency){
 		List<Coin> sorted = new ArrayList<>();
