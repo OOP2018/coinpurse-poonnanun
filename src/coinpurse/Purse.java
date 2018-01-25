@@ -55,7 +55,7 @@ public class Purse {
      * Return the capacity of the coin purse.
      * @return the capacity
      */
-    //TODO write accessor method for capacity. Use Java naming convention.
+
     public int getCapacity() { 
 		return capacity; 
 	}
@@ -81,6 +81,9 @@ public class Purse {
      * @return true if coin inserted, false if can't insert
      */
     public boolean insert( Coin coin ) {
+    	if(coin.getValue() == 0){
+    		return false;
+    	}
         if(isFull()){
         	return false;
         }
@@ -97,7 +100,6 @@ public class Purse {
 	 *    or null if cannot withdraw requested amount.
      */
     public Coin[] withdraw( double amount ) {
-        //TODO don't allow to withdraw amount < 0
    
         if(amount < 0 || amount > getBalance()){
         	System.out.println("Can't withdraw exactly = "+amount);
@@ -105,70 +107,31 @@ public class Purse {
         }
         List<Coin> temp = new ArrayList<>();
         java.util.Collections.sort(money);
-        java.util.Collections.reverse(money);
         double amountLeft = amount;
-        double amountCheck = amount;
-        int check = 0;
-        for(int b = 0; b<money.size(); b++){
-        	amountCheck -= money.get(b).getValue();
-        	if(amountCheck < 0){
-        		amountCheck += money.get(b).getValue();
-        	}
-        	if(amountCheck == 0){
-        		if(b == money.size()){
-        			check = 1;
-        		}
+       
+        for(int a = money.size()-1; a >= 0 ; a--){
+        	if(amountLeft == 0){
         		break;
         	}
-        	
-        }
-        if(check == 0){
-        	for(int a = 0; a < money.size(); a++){
-        		if(amountLeft == 0){
-        			break;
-        		}
-        		if(amountLeft - money.get(a).getValue() >= 0){
-        			amountLeft -= money.get(a).getValue();
-        			temp.add(money.get(a));
-        			money.remove(a);
-        		}
+        	if(amountLeft - money.get(a).getValue() >= 0){
+        		amountLeft -= money.get(a).getValue();
+        		temp.add(money.get(a));
+        		money.remove(a);
         	}
-        	Coin[] withdrawAmount = new Coin[temp.size()];
-        	withdrawAmount = temp.toArray(withdrawAmount);
-        	if ( withdrawAmount == null){	
-    			System.out.println("Fail to withdraw : "+amount);
-            	return null;
-    		}
-        	return withdrawAmount;
         }
-        System.out.println("Fail to withdraw : "+amount);
-        return null;
-	   /*
-		* See lab sheet for outline of a solution, 
-		* or devise your own solution.
-		* The idea is to be greedy.
-		* Try to withdraw the largest coins possible.
-		* Each time you choose a coin as a candidate for
-		* withdraw, add it to a temporary list and
-		* decrease the amount (remainder) to withdraw.
-		* 
-		* If you reach a point where amountNeededToWithdraw == 0
-		* then you found a solution!
-		* Now, use the temporary list to remove coins
-		* from the money list, and return the temporary
-		* list (as an array).
-		*/
-		
-		// Did we get the full amount?
-		// This code assumes you decrease amount each time you remove a coin.
-    	// Your code might use some other variable for the remaining amount to withdraw.
-		
-
-		// Success.
-		// Remove the coins you want to withdraw from purse,
-		// and return them as an array.
-		// Use list.toArray( array[] ) to copy a list into an array.
-		// toArray returns a reference to the array itself.
+        Coin[] withdrawAmount = new Coin[temp.size()];
+    	withdrawAmount = temp.toArray(withdrawAmount);
+        if ( withdrawAmount == null){	
+    		System.out.println("Fail to withdraw : "+amount);
+    		return null;
+    	}
+        if( amountLeft > 0 ){
+    		money.addAll(temp);
+    		System.out.println("Fail to withdraw : "+amount);
+    		return null;
+    	}
+        return withdrawAmount;
+	   
 	}
     /** 
      * toString returns a string description of the purse contents.
@@ -185,4 +148,3 @@ public class Purse {
     }
 
 }
-//TODO When you finish, there should not be any TODO comments, including this one!

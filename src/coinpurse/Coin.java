@@ -23,21 +23,10 @@ public class Coin implements Comparable<Coin>{
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj){
-			return true;
-		}
-		if (obj == null){
-			return false;
-		}
-		Coin other = (Coin) obj;
-		if (!currency.equalsIgnoreCase(other.currency)){
-			return false;
-		}
-			
-		if (value != value){
-			return false;
-		}
-		return true;
+		if(obj == null) return false;
+		if(obj.getClass() != this.getClass()) return false;
+		Coin coin = (Coin) obj;
+		return this.currency.equals(((Coin) obj).currency) && this.value == ((Coin) obj).value;
 	}
 	
 	@Override
