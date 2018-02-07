@@ -78,7 +78,7 @@ public class Purse {
      * @return true if coin inserted, false if can't insert
      */
     public boolean insert( Valuable value ) {
-    	if(value.getValue() == 0){
+    	if(value.getValue() <= 0){
     		return false;
     	}
         if(isFull()){
@@ -134,6 +134,7 @@ public class Purse {
     /** 
      * toString returns a string description of the purse contents.
      * It can return whatever is a useful description.
+     * @return String of description of the purse contents
      */
     public String toString() {
         String answer = "In your purse got{ ";
