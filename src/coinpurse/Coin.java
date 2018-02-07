@@ -3,7 +3,7 @@ package coinpurse;
  * Coin represents coinage (money) with a fixed value and currency
  * @author Poonnanun Poonpathum
  */
-public class Coin implements Comparable<Coin>{
+public class Coin implements Valuable{
 
 	private double value;
 	private String currency;
@@ -43,7 +43,6 @@ public class Coin implements Comparable<Coin>{
 	public boolean equals(Object obj) {
 		if(obj == null) return false;
 		if(obj.getClass() != this.getClass()) return false;
-		Coin coin = (Coin) obj;
 		return this.currency.equals(((Coin) obj).currency) && this.value == ((Coin) obj).value;
 	}
 	
@@ -53,8 +52,7 @@ public class Coin implements Comparable<Coin>{
 	 * @return 0 if both equal
 	 * @return -1 if coin b > coin a
 	 */
-	@Override
-	public int compareTo(Coin coin){
+	public int compareTo(Valuable coin){
 		if(this.value < coin.getValue()){
 			return -1;
 		}
@@ -73,6 +71,6 @@ public class Coin implements Comparable<Coin>{
 	 */
 	@Override
 	public String toString(){
-		return value+"-"+currency;
+		return value+"-"+currency+" [coin] ";
 	}
 }

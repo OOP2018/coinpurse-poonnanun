@@ -35,15 +35,18 @@ public class PurseTest {
     }
     
     /** Make a coin with the default currency. To save typing "new Coin(...)" */
-    private Coin makeCoin(double value) {
+    private Valuable makeCoin(double value) {
 		return new Coin(value,CURRENCY);
 	}
-
+    /** Make a note with the default currency. To save typing "new BankNote(...)" */
+    private Valuable makeNote(double value){
+    	return new BankNote(value,CURRENCY);
+    }
     /** Easy test that the Purse constructor is working. */
     @Test
     public void testConstructor()
     {
-        Purse purse = new Purse(3);
+        Purse purse = new Purse(5);
         assertEquals(3, purse.getCapacity());
         assertEquals(false, purse.isFull());
         assertEquals(0, purse.count());
@@ -51,17 +54,21 @@ public class PurseTest {
 
     
 
-    /** Insert some coins. Easy test. */
+    /** Insert some coins and notes. Easy test. */
     @Test
     public void testInsert()
     {
         Purse purse = new Purse(3);
-        Coin coin1 = makeCoin(5);
-        Coin coin2 = makeCoin(10);
-        Coin coin3 = makeCoin(1);
+        Valuable coin1 = makeCoin(5);
+        Valuable coin2 = makeCoin(10);
+        Valuable coin3 = makeCoin(1);
+        Valuable note1 = makeNote(20);
+        Valuable note2 = makeNote(50);
         assertTrue( purse.insert(coin1));
         assertTrue( purse.insert(coin3));
         assertTrue( purse.insert(coin2));
+        assertTrue( purse.insert(note1));
+        assertTrue( purse.insert(note2));
         assertEquals( 3, purse.count() );
         // purse is full so insert should fail
         assertFalse( purse.insert(makeCoin(1)) );
@@ -106,7 +113,7 @@ public class PurseTest {
 		int capacity = 5;
 		double value = 10.0;
 		Purse purse = new Purse(capacity);
-		Coin coin = new Coin(value, "THB");
+		Valuable coin = new Coin(value, "THB");
 		assertTrue( purse.insert(coin) );
 		assertTrue( purse.insert(coin) ); // should be allowed
 		assertTrue( purse.insert(coin) ); // should be allowed
@@ -122,10 +129,10 @@ public class PurseTest {
 		double [] values = {1, 20, 0.5, 10}; // values of coins we will insert
 		
 		for(double value : values) {
-			Coin coin = makeCoin(value);
+			Valuable coin = makeCoin(value);
 			assertTrue(purse.insert(coin));
 			assertEquals(value,  purse.getBalance(), TOL);
-			Coin [] result = purse.withdraw(value);
+			Valuable [] result = purse.withdraw(value);
 			assertTrue( result != null );
 			assertEquals( 1, result.length );
 			assertSame(  coin, result[0] ); // should be same object
@@ -138,19 +145,19 @@ public class PurseTest {
 	@Test(timeout=1000)
 	public void testMultiWithdraw() {
 		Purse purse = new Purse(10);
-		Coin[] coins = { makeCoin(5.0), makeCoin(10.0), makeCoin(1.0), makeCoin(5.0) };
+		Valuable[] coins = { makeCoin(5.0), makeCoin(10.0), makeCoin(1.0), makeCoin(5.0) };
 		// insert them all
-		for(Coin coin: coins) assertTrue( purse.insert(coin) );
+		for(Valuable coin: coins) assertTrue( purse.insert(coin) );
 		
 		double amount1 = coins[1].getValue() + coins[3].getValue();
 		double amount2 = coins[0].getValue() + coins[2].getValue();
 		assertEquals(amount1+amount2, purse.getBalance(), TOL );
 		
-		Coin [] wd1 = purse.withdraw(amount1);
+		Valuable [] wd1 = purse.withdraw(amount1);
 		assertEquals(amount1, sum(wd1), TOL );
 		
 		assertEquals(amount2, purse.getBalance(), TOL );
-		Coin [] wd2 = purse.withdraw(amount2);
+		Valuable [] wd2 = purse.withdraw(amount2);
 		
 		// should be empty now
 		assertEquals(0, purse.getBalance(), TOL );
@@ -163,21 +170,21 @@ public class PurseTest {
 		Purse purse = new Purse(10);
 		// Coins we want to insert and then withdraw.
 		// Use values such that greedy will succeed, but not monotonic
-		List<Coin> coins = Arrays.asList(
+		List<Valuable> coins = Arrays.asList(
 				makeCoin(1.0), makeCoin(0.5), makeCoin(10.0), makeCoin(0.25), makeCoin(5.0)
 				);
 		// num = number of coins to insert and then withdraw
 		for(int num=1; num <= coins.size(); num++) {
 			double amount = 0.0;
-			List<Coin> subList = coins.subList(0, num);
-			for(Coin c: subList) {
+			List<Valuable> subList = coins.subList(0, num);
+			for(Valuable c: subList) {
 				purse.insert(c);
 				amount += c.getValue();
 			}
 			// balance should be exactly what we just inserted
 			assertEquals( amount, purse.getBalance(), TOL);
 			// can we withdraw it all?
-			Coin[] result = purse.withdraw(amount);
+			Valuable[] result = purse.withdraw(amount);
 			String errmsg = String.format("couldn't withdraw %.2f but purse has %s",
 					amount, Arrays.toString(subList.toArray()) );
 			assertNotNull( errmsg, result );
@@ -206,10 +213,10 @@ public class PurseTest {
 	 * @param coins array of coins
 	 * @return sum of values of the coins
 	 */
-	private double sum(Coin[] coins)  {
+	private double sum(Valuable[] coins)  {
 		if (coins == null) return 0.0;
 		double sum = 0;
-		for(Coin c: coins) if (c != null) sum += c.getValue();
+		for(Valuable c: coins) if (c != null) sum += c.getValue();
 		return sum;
 	}
 }
