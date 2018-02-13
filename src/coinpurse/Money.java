@@ -1,5 +1,10 @@
 package coinpurse;
 
+/**
+ * Class that use for manage coins and banknotes.
+ * Contain getValue, getCurrency, compareT0 and equals.
+ * @author Poonnanun Poonnopathum
+ */
 public class Money implements Valuable{
 	
 	private double value;
@@ -46,5 +51,4 @@ public class Money implements Valuable{
 		if(obj.getClass() != this.getClass()) return false;
 		return this.getCurrency().equals(((Money) obj).getCurrency()) && this.getValue() == ((Money) obj).getValue();
 	}
-
 }
