@@ -14,6 +14,12 @@ public class BankNote extends Money{
 		this.serialNumber = nextSerialNumber;
 		this.nextSerialNumber++;
 	}
+	
+	public BankNote(double value, String currency, long nextSerialNumber){
+		super(value, currency);
+		this.serialNumber = nextSerialNumber;
+		this.nextSerialNumber++;
+	}
 
 	/**
 	 * get serial of banknotes

@@ -20,6 +20,12 @@ public class Coin extends Money{
 	 */
 	@Override
 	public String toString(){
-		return this.getValue()+"-"+this.getCurrency()+" [coin] ";
+		double value = this.getValue();
+		String currency = this.getCurrency();
+		if(this.getCurrency().equals("Ringgit")) {
+			currency = "Sen";
+			value *= 100;
+		}
+		return value+"-"+currency+" [coin] ";
 	}
 }
