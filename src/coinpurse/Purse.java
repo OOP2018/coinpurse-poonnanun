@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import strategy.NormalWithdrawStrategy;
+import strategy.RecusiveWithdrawStrategy;
+import strategy.WithdrawStrategy;
+
 /**
  *  A money purse contains money.
  *  You can insert money, withdraw money, check the balance,
@@ -11,7 +15,7 @@ import java.util.List;
  *  
  *  @author Poonnanun Poonnopathum
  */
-public class Purse {
+public class Purse extends java.util.Observable {
     /** Collection of objects in the purse. */
     
     /** Capacity is maximum number of items the purse can hold.
@@ -90,35 +94,16 @@ public class Purse {
     }
     
     public Valuable[] withdraw( Valuable amount){
-    	 if(amount.getValue() < 0 || amount.getValue() > getBalance()){
-         	System.out.println("Can't withdraw exactly = "+amount);
-         	return null;
-         }
-         List<Valuable> temp = new ArrayList<>();
-         java.util.Collections.sort(money, comparator);
-         double amountLeft = amount.getValue();
-         for(int a = money.size()-1; a >= 0 ; a--){
-        	if(amount.getCurrency().equals(money.get(a).getCurrency())){
-        		if(amountLeft == 0)	break;
-        		if(amountLeft - money.get(a).getValue() >= 0){
-         		amountLeft -= money.get(a).getValue();
-         		temp.add(money.get(a));
-         		money.remove(a);
-        		}
-         	}
-         }
-         Valuable[] withdrawAmount = new Valuable[temp.size()];
-     	withdrawAmount = temp.toArray(withdrawAmount);
-         if ( withdrawAmount == null){	
-     		System.out.println("Fail to withdraw : "+amount.getValue());
-     		return null;
-     	}
-         if( amountLeft > 0 ){
-     		money.addAll(temp);
-     		System.out.println("Fail to withdraw : "+amount.getValue());
-     		return null;
-     	}
-         return withdrawAmount;
+    	 WithdrawStrategy strategy = new NormalWithdrawStrategy();
+    	 List<Valuable> withdrawAmount = strategy.withdraw(amount, money);
+    	 if(withdrawAmount == null) {
+    		 return null;
+    	 }
+    	 Valuable[] returnAmount = new Valuable[withdrawAmount.size()];
+    	 for(int a = 0; a<returnAmount.length; a++){
+    		 returnAmount[a] = withdrawAmount.get(a);
+    	 }
+         return returnAmount;
     }
     /**  
      *  Withdraw the requested amount of money.
@@ -129,7 +114,6 @@ public class Purse {
 	 *    or null if cannot withdraw requested amount.
      */
     public Valuable[] withdraw( double amount ) {
-   
         return withdraw( new Money(amount,"Baht"));
 	   
 	}
