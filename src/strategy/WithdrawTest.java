@@ -179,4 +179,27 @@ public class WithdrawTest {
 		assertEquals(0,quan,0.0);
 	}
 	
+	/**
+	 * Test case withdraw diffrent currency in recusive
+	 */
+	@Test(expected = NullPointerException.class)
+	public void testWrongCurrencyRecusive(){
+		strategy = new RecusiveWithdrawStrategy();
+		// amount to withdraw
+		Valuable amount = new Money(100,"Baht");
+		// money that have in purse
+		money.add(new Coin(10,"Baht"));
+		money.add(new Money(20,"Baht"));
+		money.add(new Money(20,"Baht"));
+		money.add(new Money(50,"Yen"));
+		
+		List<Valuable> test = strategy.withdraw(amount, money);
+		double quan = 0;
+		for(int a = 0; a<test.size() ; a++){
+			quan += test.get(a).getValue();
+		}
+		// greedy must withdraw every amount that ask to withdraw.
+		assertEquals(0,quan,0.0);
+	}
+	
 }
